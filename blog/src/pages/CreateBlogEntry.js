@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useHref } from "react-router-dom";
 
@@ -9,25 +8,29 @@ function CreateBlogEntryPage() {
   const backToBlogEntryList = useHref("/blogEntries/");
 
   const createBlogEntry = () => {
-    fetch("/api/v1/blogEntries", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title,
-        text,
-      }),
-    }).then((result) => {
-      if (result.ok) {
-        setTitle("");
-        setText("");
-        window.alert("Įrašas sėkmingai sukurtas");
-        window.location = { backToBlogEntryList };
-      } else {
-        window.alert("Įrašo nepavyko sukurti");
-      }
-    });
+    if (title === "") {
+      window.alert("Pavadinimas negali būti tuščias");
+    } else {
+      fetch("/api/v1/blogEntries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          text,
+        }),
+      }).then((result) => {
+        if (result.ok) {
+          setTitle("");
+          setText("");
+          window.alert("Įrašas sėkmingai sukurtas");
+          window.location = { backToBlogEntryList };
+        } else {
+          window.alert("Įrašo nepavyko sukurti");
+        }
+      });
+    }
   };
 
   return (
